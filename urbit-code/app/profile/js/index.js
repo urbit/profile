@@ -53053,8 +53053,8 @@ lyrtesmudnytbyrsenwegfyrmurtelreptegpecnelnevfes\
 	  }
 	}
 
-	let api = new UrbitApi();
-	window.api = api;
+	let api$1 = new UrbitApi();
+	window.api = api$1;
 
 	const _jsxFileName$c = "/Users/logan/Dev/apps/profile/src/js/warehouse.js";
 
@@ -53193,8 +53193,8 @@ lyrtesmudnytbyrsenwegfyrmurtelreptegpecnelnevfes\
 	  }
 	}
 
-	let warehouse = new UrbitWarehouse();
-	window.warehouse = warehouse;
+	let warehouse$1 = new UrbitWarehouse();
+	window.warehouse = warehouse$1;
 
 	const _jsxFileName$d = "/Users/logan/Dev/apps/profile/src/js/components/root.js";
 	class Root extends react_1 {
@@ -53205,7 +53205,7 @@ lyrtesmudnytbyrsenwegfyrmurtelreptegpecnelnevfes\
 	      menuOpen: false
 	    };
 
-	    warehouse.pushCallback("menu.toggle", (rep) => {
+	    warehouse$1.pushCallback("menu.toggle", (rep) => {
 	      let newStatus = (rep.data) ? rep.data.open : !this.state.menuOpen;
 
 	      this.setState({
@@ -53222,10 +53222,10 @@ lyrtesmudnytbyrsenwegfyrmurtelreptegpecnelnevfes\
 	    if (this.state.menuOpen) {
 	      content = (
 	        react.createElement(CommandMenu, {
-	          api: api,
-	          store: warehouse.store,
-	          storeReports: warehouse.storeReports,
-	          pushCallback: warehouse.pushCallback, __self: this, __source: {fileName: _jsxFileName$d, lineNumber: 34}}
+	          api: api$1,
+	          store: warehouse$1.store,
+	          storeReports: warehouse$1.storeReports,
+	          pushCallback: warehouse$1.pushCallback, __self: this, __source: {fileName: _jsxFileName$d, lineNumber: 34}}
 	        )
 	      );
 	    } else {
@@ -53236,10 +53236,10 @@ lyrtesmudnytbyrsenwegfyrmurtelreptegpecnelnevfes\
 	            render:  (props) => {
 	              return (
 	                react.createElement(ProfilePage, { 
-	                  api: api,
-	                  store: warehouse.store,
-	                  storeReports: warehouse.storeReports,
-	                  pushCallback: warehouse.pushCallback,
+	                  api: api$1,
+	                  store: warehouse$1.store,
+	                  storeReports: warehouse$1.storeReports,
+	                  pushCallback: warehouse$1.pushCallback,
 	                  ...props, __self: this, __source: {fileName: _jsxFileName$d, lineNumber: 48}} )
 	              );
 	            }, __self: this, __source: {fileName: _jsxFileName$d, lineNumber: 45}} )
@@ -53253,6 +53253,33 @@ lyrtesmudnytbyrsenwegfyrmurtelreptegpecnelnevfes\
 
 	}
 
+	class UrbitOperator {
+	  constructor() {
+	  }
+
+	  start() {
+	    if (api.authTokens) {
+	      this.bindShortcuts();
+	    } else {
+	      console.error("~~~ ERROR: Must set api.authTokens before operation ~~~");
+	    }
+	  }
+
+	  bindShortcuts() {
+	    mousetrap.bind(["mod+k"], () => {
+	      warehouse.storeReports([{
+	        type: "menu.toggle"
+	      }]);
+
+	      return false;
+	    });
+	  }
+
+	}
+
+	let operator = new UrbitOperator();
+	window.operator = operator;
+
 	const _jsxFileName$e = "/Users/logan/Dev/apps/profile/src/index.js";
 	console.log('app running');
 
@@ -53264,13 +53291,15 @@ lyrtesmudnytbyrsenwegfyrmurtelreptegpecnelnevfes\
 	  host    :    zod
 	*/
 
-	api.setAuthTokens({
+	api$1.setAuthTokens({
 	  ship: window.ship
 	});
+
+	operator.start();
 
 	window.util = util;
 	window._ = lodash;
 
-	reactDom.render(react.createElement(Root, {__self: undefined, __source: {fileName: _jsxFileName$e, lineNumber: 28}} ), document.querySelectorAll("#root")[0]);
+	reactDom.render(react.createElement(Root, {__self: undefined, __source: {fileName: _jsxFileName$e, lineNumber: 31}} ), document.querySelectorAll("#root")[0]);
 
 }));
