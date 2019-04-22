@@ -1,10 +1,4 @@
 import _ from 'lodash';
-import { MessagesReducer } from '/reducers/messages';
-import { ConfigsReducer } from '/reducers/configs';
-import { ViewsReducer } from '/reducers/views';
-import { NamesReducer } from '/reducers/names';
-import { CirclesReducer } from '/reducers/circles';
-// import { PublicReducer } from '/reducers/public';
 import { PAGE_STATUS_READY, PAGE_STATUS_PROCESSING, REPORT_PAGE_STATUS, REPORT_NAVIGATE } from '/lib/constants';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -12,46 +6,9 @@ import { Root } from '/components/root';
 
 
 const REPORT_KEYS = [
-  'landscape.prize',
-        // /circle/<cir_name>/grams
-        // call automatically on inbox
-        // call automatically on /urbit-meta
-        // call automatically on any DM circles created
-  'circle.gram',
-  'circle.nes',
-        // /circle/<cir_name>/config-l
-        // used for loading inbox config
-  'circle.cos.loc',
-        // /circle/<cir_name>/config-r
-        // used for loading inbox's sources' configs
-  'circle.cos.rem',
-        // /circle/<cir_name>/config-l
-        // used for fora topic creation....maybe? let me check
-
-  'circle.config',
-  'circle.config.dif.full',
-        // /circle/<cir_name>/config-l
-        // used for subscription / unsubscription
-  'circle.config.dif.source',
-        // /circles, required for initialization
-  'circles',
-
-        // frontend specific, no server calls
-  'menu.toggle',
-  'config.ext',
-  'inbox.sources-loaded',
-  'circle.read',
-  'views.streamActive',
-  'dm.new',
-  'dm.clear',
   REPORT_PAGE_STATUS,
   REPORT_NAVIGATE,
-        // unused events
-  // 'public',
-  // 'circle.config.dif.permit/circle.config',
-  // 'circle.config.dif.remove/circle.config',
-  // 'circle.pes.loc',
-  // 'circle.pes.rem',
+  'menu.toggle'
 ]
 
 class UrbitWarehouse {
@@ -68,7 +25,7 @@ class UrbitWarehouse {
       },
       configs: {},
       views: {
-        transition: PAGE_STATUS_PROCESSING,
+        transition: PAGE_STATUS_READY,
         inbox: "inbox-recent",
         activeStream: null,
       },
@@ -84,15 +41,8 @@ class UrbitWarehouse {
 
     this.reports = this.buildReports();
 
-    this.messagesReducer = new MessagesReducer();
-    this.configsReducer = new ConfigsReducer();
-    this.viewsReducer = new ViewsReducer();
-    this.namesReducer = new NamesReducer();
-    // this.publicReducer = new PublicReducer();
-    this.circlesReducer = new CirclesReducer();
-
-    this.pushCallback = this.pushCallback.bind(this);
     this.storeReports = this.storeReports.bind(this);
+    this.pushCallback = this.pushCallback.bind(this);
   }
 
   buildReports() {
@@ -144,13 +94,6 @@ class UrbitWarehouse {
 
   storeReports(newReports) {
     newReports.forEach((rep) => console.log('new report: ', rep));
-    this.messagesReducer.reduce(newReports, this.store);
-    this.configsReducer.reduce(newReports, this.store);
-    this.viewsReducer.reduce(newReports, this.store);
-    this.namesReducer.reduce(newReports, this.store);
-    this.circlesReducer.reduce(newReports, this.store);
-    // this.publicReducer.reduce(newReports, this.store);
-
     console.log('full store = ', this.store);
 
     this.processPending(newReports);
@@ -174,6 +117,7 @@ class UrbitWarehouse {
       _.pullAt(reportBucket.callbacks, clearIndexes);
     })
   }
+
 
   pushCallback(key, callback) {
     if (typeof key === "string") {

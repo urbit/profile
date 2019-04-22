@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import { Icon } from '/components/lib/icon';
 import { getQueryParams, profileUrl, dateToDa } from '/lib/util';
-import { getStationDetails } from '/services';
 import { Button } from '/components/lib/button';
 import { PageStatus } from '/components/lib/page-status';
 import { REPORT_PAGE_STATUS, REPORT_NAVIGATE, PAGE_STATUS_TRANSITIONING, PAGE_STATUS_READY, PAGE_STATUS_PROCESSING, PAGE_STATUS_RECONNECTING, PAGE_STATUS_DISCONNECTED, LANDSCAPE_ROOT } from '/lib/constants';
 import classnames from 'classnames';
 import _ from 'lodash';
-import { Link } from 'react-router-dom';
 
 export class Header extends Component {
   constructor(props) {
@@ -23,23 +21,36 @@ export class Header extends Component {
     }]);
   }
 
-  getStationHeaderData(station) {
-    let stationDetails = getStationDetails(station);
-
-    return {
+  getHeaderData() {
+    let headerData = {
+      icon: 'icon-sig',
       title: {
-        display: stationDetails.stationTitle,
-        href: stationDetails.stationUrl
-      },
-      breadcrumbs: [{
-        display: `~${stationDetails.host}`,
-        href: stationDetails.hostProfileUrl
-      }],
-      station,
-      stationDetails
+        display: this.props.data.author.substr(1),
+        href: profileUrl(this.props.data.author.substr(1)),
+        style: "mono"
+      }
     }
+
+    return headerData;
   }
-  
+
+  buildHeaderCarpet(headerData) {
+    let indexClass = classnames({
+      'vanilla': true,
+      'mr-8': true,
+      'inbox-link': true,
+      'inbox-link-active': true,
+    });
+    return (
+      <React.Fragment>
+        <div className="flex-col-2"></div>
+        <div className="flex-col-x text-heading text-squat">
+          <a className={indexClass} href={`/~landscape/collections/${this.props.data.author}/profile`}>Profile</a>
+        </div>
+      </React.Fragment>
+    );
+  }
+
   buildHeaderBreadcrumbs(headerData) {
     if (headerData.breadcrumbs) {
       return headerData.breadcrumbs.map(({display, href}, i) => {
@@ -56,9 +67,11 @@ export class Header extends Component {
   }
 
   buildHeaderContent(headerData) {
-    let breadcrumbsElem, headerClass;
+    let subscribeClass, breadcrumbsElem, headerClass,
+      headerCarpet;
 
     breadcrumbsElem = this.buildHeaderBreadcrumbs(headerData);
+    headerCarpet = this.buildHeaderCarpet(headerData);
 
     headerClass = classnames({
       'flex-col-x': true,
@@ -75,7 +88,7 @@ export class Header extends Component {
           </div>
         </div>
         <div className="row align-center header-mainrow">
-          <div className="flex-col-1 flex justify-end" />
+          <div className="flex-col-1 flex justify-end"></div>
           <div className="flex-col-1 flex space-between align-center">
             <a onClick={this.toggleMenu}>
               <Icon type="icon-panini" />
@@ -85,6 +98,9 @@ export class Header extends Component {
           <h1 className={headerClass}>
             <a href={headerData.title.href}>{headerData.title.display}</a>
           </h1>
+        </div>
+        <div className="row header-carpet">
+          {headerCarpet}
         </div>
         <PageStatus
           transition={this.props.store.views.transition}
@@ -96,23 +112,7 @@ export class Header extends Component {
   }
 
   render() {
-
-    let headerData = {
-      title: {
-        display: this.props.data.circle,
-        style: "mono"
-      },
-      icon: 'icon-stream-chat',
-      actions: {
-        subscribe: null,
-        details: '',
-      },
-      breadcrumbs: [{
-        display: this.props.data.host,
-        href: '/~profile/' + this.props.data.host
-      }]
-    }
-
+    let headerData = this.getHeaderData();
     let headerContent = this.buildHeaderContent(headerData);
 
     return headerContent;

@@ -2,21 +2,21 @@
 /=  index
   /^  octs
   /;  as-octs:mimes:html
-  /:  /===/app/chat/index
+  /:  /===/app/profile/index
   /|  /html/
       /~  ~
   ==
 /=  script
   /^  octs
   /;  as-octs:mimes:html
-  /:  /===/app/chat/js/index
+  /:  /===/app/profile/js/index
   /|  /js/
       /~  ~
   ==
 /=  style
   /^  octs
   /;  as-octs:mimes:html
-  /:  /===/app/chat/css/index
+  /:  /===/app/profile/css/index
   /|  /css/
       /~  ~
   ==
@@ -44,7 +44,7 @@
   ~&  'connect'
   ?~  old
     :_  this
-    [ost.bol %connect / [~ /'~chat'] %chat]~
+    [ost.bol %connect / [~ /'~profile'] %profile]~
   [~ this]
 ::
 ++  bound
@@ -66,19 +66,19 @@
   ::
   ::  styling
   ::
-      [%'~chat' %css %index ~]
+      [%'~profile' %css %index ~]
     :_  this
     [ost.bol %http-response (css-response:app style)]~
   ::
   ::  javascript
   ::
-      [%'~chat' %js %index ~]
+      [%'~profile' %js %index ~]
     :_  this
     [ost.bol %http-response (js-response:app script)]~
   ::
   ::  inbox page
   ::
-     [%'~chat' *]
+     [%'~profile' *]
     :_  this
     [ost.bol %http-response (html-response:app index)]~
   ==

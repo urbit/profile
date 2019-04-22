@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter, Route } from "react-router-dom";
 
 import { CommandMenu } from '/components/command';
-import { Header } from '/components/header';
-import { ChatPage } from '/components/chat';
+import { ProfilePage } from '/components/profile';
 
 import { api } from '/api';
 import { warehouse } from '/warehouse';
@@ -27,24 +26,6 @@ export class Root extends Component {
     });
   }
 
-  loadHeader(type) {
-    let headerData = {
-      type: "default"
-    }
-
-    return (
-      <Header
-        data={headerData}
-        api={api}
-        store={warehouse.store}
-        storeReports={warehouse.storeReports}
-        pushCallback={warehouse.pushCallback}
-        localSet={warehouse.localSet}
-        localGet={warehouse.localGet}
-      />
-    );
-  }
-
   render() {
     let content;
 
@@ -58,36 +39,18 @@ export class Root extends Component {
         />
       )
     } else {
-      console.log('render root');
       content = (
        <BrowserRouter>
          <div>
-          <Route exact path="/~chat"
+          <Route exact path="/~profile/:ship"
             render={ (props) => {
               return (
-                <div>
-                  {this.loadHeader('all')}
-                  <InboxAllPage 
-                    api={api}
-                    store={warehouse.store}
-                    storeReports={warehouse.storeReports}
-                    pushCallback={warehouse.pushCallback}
-                  />
-                </div>
-              );
-            }} />
-          <Route exact path="/~chat/:ship/:station"
-            render={ (props) => {
-              return (
-                <ChatPage 
+                <ProfilePage 
                   api={api}
                   store={warehouse.store}
                   storeReports={warehouse.storeReports}
                   pushCallback={warehouse.pushCallback}
-                  localGet={warehouse.localGet}
-                  localSet={warehouse.localSet}
-                  {...props}
-                />
+                  {...props} />
               );
             }} />
         </div>

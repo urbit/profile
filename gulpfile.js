@@ -29,7 +29,7 @@ gulp.task('css-bundle', function() {
     .src('src/index.css')
     .pipe(cssimport())
     .pipe(cssnano())
-    .pipe(gulp.dest('./urbit-code/app/chat/css'));
+    .pipe(gulp.dest('./urbit-code/app/profile/css'));
 });
 
 gulp.task('jsx-transform', function(cb) {
@@ -68,14 +68,14 @@ gulp.task('js-imports', function(cb) {
       console.log(e);
       cb();
     })
-    .pipe(gulp.dest('./urbit-code/app/chat/js/'))
+    .pipe(gulp.dest('./urbit-code/app/profile/js/'))
     .on('end', cb);
 });
 
 gulp.task('js-minify', function () {
-  return gulp.src('./urbit-code/app/chat/js/index.js')
+  return gulp.src('./urbit-code/app/profile/js/index.js')
     .pipe(minify())
-    .pipe(gulp.dest('./urbit-code/app/chat/js/'));
+    .pipe(gulp.dest('./urbit-code/app/profile/js/'));
 });
 
 gulp.task('js-cachebust', function(cb) {
@@ -85,7 +85,7 @@ gulp.task('js-cachebust', function(cb) {
       let commitHash = firstLine.split(' ')[1].substr(0, 10);
       let newFilename = "index-" + commitHash + "-min.js";
 
-      exec('mv ./urbit-code/app/chat/js/index-min.js ./urbit-code/app/chat/js/' + newFilename);
+      exec('mv ./urbit-code/app/profile/js/index-min.js ./urbit-code/app/profile/js/' + newFilename);
     })
   );
 })
